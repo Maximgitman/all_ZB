@@ -1,11 +1,18 @@
 from cs50 import SQL
 from flask import Flask, render_template, request
 from emotion_detection.sentiment import SemanticRu
-
+from text_from_img.text_recognition import ocr_text
 
 Sentiment_ru = SemanticRu()
 
+UPLOAD_FOLDER = "static/uploads/"
+FILES_EXTENSION = set(["png", "jpg", "jpeg"])
+
 app = Flask(__name__)
+
+
+def check_extension(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in FILES_EXTENSION
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -56,6 +63,8 @@ def emotion():
 @app.route("/text-from-image", methods=["GET", "POST"])
 def txt_from_img():
     if request.method == "POST":
+        if "file" not in request.files:
+            return render_template("error.html", )
         # Show last 3 results from DataBase
         results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
         return render_template("text-from-image.html", results=results)
