@@ -1,21 +1,31 @@
 from cs50 import SQL
-from flask import Flask, render_template, request
+from flask import Flask, flash, render_template, request, redirect
 from emotion_detection.sentiment import SemanticRu
+from werkzeug.utils import secure_filename
 from text_from_img.text_recognition import ocr_text
+import os
 
 Sentiment_ru = SemanticRu()
 
 UPLOAD_FOLDER = "static/uploads/"
-FILES_EXTENSION = set(["png", "jpg", "jpeg"])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 app = Flask(__name__)
+
+# Ensure templates are auto-reloaded
+app.secret_key = "not-so-secret"
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
 def check_extension(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in FILES_EXTENSION
 
-# Ensure templates are auto-reloaded
-app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///static/allzb.db")
@@ -60,17 +70,34 @@ def emotion():
         return render_template("emotion.html", results=results)
 
 
-@app.route("/text-from-image", methods=["GET", "POST"])
-def txt_from_img():
+# route and function to handle the upload page
+@app.route("/text_from_image", methods=["GET", "POST"])
+def text_from_image():
     if request.method == "POST":
-        if "file" not in request.files:
-            return render_template("error.html", )
-        # Show last 3 results from DataBase
-        results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-        return render_template("text-from-image.html", results=results)
+        file = request.files["file"]
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            flash("Image uploaded")
+
+            # Path to image
+            img_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
+            # Getting text from image
+            extracted_text = ocr_text(img_path)
+            db.execute("INSERT INTO image (image, text) VALUES(?, ?)", img_path, extracted_text)
+            results = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
+            return render_template("text_from_image.html",
+                                   img_path=img_path,
+                                   extracted_text=extracted_text,
+                                   results=results)
+        else:
+            flash("Incorrect type, choose file with extension - png, jpg, jpeg")
+            return redirect(request.url)
     else:
-        results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-        return render_template("text-from-image.html", results=results)
+        results = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
+        # extract the text and display it
+        return render_template("text_from_image.html", results=results)
 
 
 @app.route("/similar-text", methods=["GET", "POST"])
