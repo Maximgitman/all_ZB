@@ -48,10 +48,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for result in results %}
+                        {% for emotion in emotions %}
                             <tr>
-                                <td>{{ result.input }}</td>
-                                <td>{{ result.output }}</td>
+                                <td>{{ emotion.input }}</td>
+                                <td>{{ emotion.output }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="section">
+                <h2>Last 3 results for OCR</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image name</th>
+                            <th>Text from Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for text_image in exctracted_txt %}
+                            <tr>
+                                <td>{{ text_image.image }}</td>
+                                <td>{{ text_image.text }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

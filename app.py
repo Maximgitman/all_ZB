@@ -43,8 +43,12 @@ def after_request(response):
 @app.route("/")
 def index():
     # Show last 3 results from DataBase
-    results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-    return render_template("index.html", results=results)
+    emotions = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
+    exctracted_txt = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
+    # extract the text and display it
+    return render_template("index.html",
+                           emotions=emotions,
+                           exctracted_txt=exctracted_txt)
 
 
 @app.route("/emotion", methods=["GET", "POST"])
