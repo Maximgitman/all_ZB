@@ -28,13 +28,13 @@
                 <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/emotion">EmotionDetector</a>
+                <a class="nav-link" href="/emotion-detection">Emotion-Detection</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/text_from_image">TextFromImage</a>
+                <a class="nav-link active" href="/text-recognition">Text-Recognition</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/similar-recognition">SimilarText</a>
+                <a class="nav-link" href="/similar-recognition">Similar-Recognition</a>
             </li>
         </nav>
         <div class="container">
@@ -50,7 +50,7 @@
                     {% endif %}
                 {% endwith %}
             </p>
-            <form action="/text_from_image" method="post", enctype="multipart/form-data">
+            <form action="/text-recognition" method="post", enctype="multipart/form-data">
                 <d1>
                     <p>
                         <input type="file" name="file" class="form-control" autocomplete="off" required>
@@ -63,7 +63,8 @@
             <div class="section">
                 {% if img_path %}
                     <h1>Result:</h1>
-                    <img src="{{ img_path }}"style="width: 50%; height: 50%">
+                    <img src="{{ img_path }}"style="width: 70%; height: 70%">
+                <p><b>Text from Image:</b> {{ extracted_text }}</p>
                 {% endif %}
                 <h2>Last 3 results for Text from Image</h2>
                 <table>

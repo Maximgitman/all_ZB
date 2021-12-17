@@ -18,7 +18,7 @@ def cosine_distance(x, y):
     magnitude_x = np.sqrt(np.sum(x ** 2))
     magnitude_y = np.sqrt(np.sum(y ** 2))
 
-    # Compute the cosine similarity
+    # Compute the cosine similar_recognition
     cosine_similarity = dot_product / (magnitude_x * magnitude_y)
     return cosine_similarity
 

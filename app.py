@@ -2,8 +2,8 @@ from cs50 import SQL
 from flask import Flask, flash, render_template, request, redirect
 from emotion_detection.sentiment import SemanticRu
 from werkzeug.utils import secure_filename
-from text_from_img.text_recognition import ocr_text
-from similarity import similarity
+from text_recognition.text_recognition import ocr_text
+from similar_recognition import similarity
 import os
 
 Sentiment_ru = SemanticRu()
@@ -54,7 +54,7 @@ def index():
                            similar_texts=similar_texts)
 
 
-@app.route("/emotion", methods=["GET", "POST"])
+@app.route("/emotion-detection", methods=["GET", "POST"])
 def emotion():
     if request.method == "POST":
         # Getting input text into base
@@ -69,16 +69,16 @@ def emotion():
 
         # Show last 3 results from DataBase
         results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 4")
-        return render_template("emotion.html", results=results)
+        return render_template("emotion-detection.html", results=results)
 
     else:
         # Show last 3 results from DataBase
         results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-        return render_template("emotion.html", results=results)
+        return render_template("emotion-detection.html", results=results)
 
 
 # route and function to handle the upload page
-@app.route("/text_from_image", methods=["GET", "POST"])
+@app.route("/text-recognition", methods=["GET", "POST"])
 def text_from_image():
     if request.method == "POST":
         file = request.files["file"]
@@ -94,7 +94,7 @@ def text_from_image():
             extracted_text = ocr_text(img_path)
             db.execute("INSERT INTO image (image, text) VALUES(?, ?)", img_path, extracted_text)
             results = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
-            return render_template("text_from_image.html",
+            return render_template("text-recognition.html",
                                    img_path=img_path,
                                    extracted_text=extracted_text,
                                    results=results)
@@ -104,7 +104,7 @@ def text_from_image():
     else:
         results = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
         # extract the text and display it
-        return render_template("text_from_image.html", results=results)
+        return render_template("text-recognition.html", results=results)
 
 
 @app.route("/similar-recognition", methods=["GET", "POST"])
