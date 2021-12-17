@@ -25,7 +25,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
 def check_extension(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in FILES_EXTENSION
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Configure CS50 Library to use SQLite database
