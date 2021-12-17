@@ -3,6 +3,7 @@ from flask import Flask, flash, render_template, request, redirect
 from emotion_detection.sentiment import SemanticRu
 from werkzeug.utils import secure_filename
 from text_from_img.text_recognition import ocr_text
+from similarity import similarity
 import os
 
 Sentiment_ru = SemanticRu()
@@ -45,10 +46,12 @@ def index():
     # Show last 3 results from DataBase
     emotions = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
     exctracted_txt = db.execute("SELECT * FROM image ORDER BY id DESC LIMIT 4")
+    similar_texts = db.execute("SELECT * FROM similar ORDER BY id DESC LIMIT 4")
     # extract the text and display it
     return render_template("index.html",
                            emotions=emotions,
-                           exctracted_txt=exctracted_txt)
+                           exctracted_txt=exctracted_txt,
+                           similar_texts=similar_texts)
 
 
 @app.route("/emotion", methods=["GET", "POST"])
@@ -104,12 +107,23 @@ def text_from_image():
         return render_template("text_from_image.html", results=results)
 
 
-@app.route("/similar-text", methods=["GET", "POST"])
+@app.route("/similar-recognition", methods=["GET", "POST"])
 def similar_txt():
     if request.method == "POST":
+        # Getting input text into base
+        text_1 = request.form.get("text_1")
+        text_2 = request.form.get("text_2")
+        if not text_1 or not text_2:  # If there is no name, showing erros page
+            return render_template("error.html", message="No texts, try again!")
+
+        get_cosine = similarity.processing(text_1, text_2)
+        # Save it into SQL
+        db.execute("INSERT INTO similar (text_1, text_2, score) VALUES(?, ?, ?)", text_1, text_2, get_cosine)
+
         # Show last 3 results from DataBase
-        results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-        return render_template("similar-text.html", results=results)
+        results = db.execute("SELECT * FROM similar ORDER BY id DESC LIMIT 4")
+        return render_template("similar-recognition.html", results=results)
     else:
-        results = db.execute("SELECT * FROM emotion ORDER BY id DESC LIMIT 3")
-        return render_template("similar-text.html", results=results)
+        # Show last 3 results from DataBase
+        results = db.execute("SELECT * FROM similar ORDER BY id DESC LIMIT 4")
+        return render_template("similar-recognition.html", results=results)

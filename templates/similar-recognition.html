@@ -37,5 +37,34 @@
                 <a class="nav-link active" href="/similar-text">SimilarText</a>
             </li>
         </nav>
+        <div class="container">
+            <div class="section">
+                <h2>Input text №1</h2>
+                <form action="/similar-recognition" method="post">
+                    <input autofocus placeholder="Russian Text №1" name="text_1" type="text" required>
+                    <input autofocus placeholder="Russian Text №2" name="text_2" type="text" required>
+                    <input type="submit" value="Get Cosine Distance">
+                </form>
+                <h2>Last 3 results for Similar Text</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input text 1</th>
+                            <th>Input text 2</th>
+                            <th>Cosine distance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>{{ result.text_1 }}</td>
+                                <td>{{ result.text_2 }}</td>
+                                <td>{{ result.score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </body>
 </html>
