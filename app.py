@@ -6,6 +6,7 @@ from text_recognition.text_recognition import ocr_text
 from similar_recognition import similarity
 import os
 
+# Initialisation class for semantic ruBERT
 Sentiment_ru = SemanticRu()
 
 UPLOAD_FOLDER = "static/uploads/"
