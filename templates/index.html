@@ -84,6 +84,7 @@
                             <th>Text 1</th>
                             <th>Text 2</th>
                             <th>Cosine</th>
+                            <th>Word2Vec</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,6 +93,7 @@
                                 <td>{{ similar.text_1 }}</td>
                                 <td>{{ similar.text_2 }}</td>
                                 <td>{{ similar.score }}</td>
+                                <td>{{ similar.w2v }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

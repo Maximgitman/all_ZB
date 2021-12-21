@@ -5,6 +5,10 @@ from werkzeug.utils import secure_filename
 from text_recognition.text_recognition import ocr_text
 from similar_recognition import similarity
 import os
+import gensim
+
+model = gensim.models.KeyedVectors.load_word2vec_format('static/w2v.bin', binary=True)
+index2word_set = set(model.index_to_key)
 
 # Initialisation class for semantic ruBERT
 Sentiment_ru = SemanticRu()
@@ -118,8 +122,17 @@ def similar_txt():
             return render_template("error.html", message="No texts, try again!")
 
         get_cosine = similarity.processing(text_1, text_2)
+
+        s1_afv = similarity.avg_feature_vector(text_1, model=model,
+                                               num_features=100, index2word_set=index2word_set)
+
+        s2_afv = similarity.avg_feature_vector(text_2, model=model,
+                                               num_features=100, index2word_set=index2word_set)
+        get_cosine_w2v = similarity.cosine_distance(s1_afv, s2_afv)
+
         # Save it into SQL
-        db.execute("INSERT INTO similar (text_1, text_2, score) VALUES(?, ?, ?)", text_1, text_2, get_cosine)
+        db.execute("INSERT INTO similar (text_1, text_2, score, w2v) VALUES(?, ?, ?, ?)",
+                   text_1, text_2, get_cosine, round(float(get_cosine_w2v), 3))
 
         # Show last 3 results from DataBase
         results = db.execute("SELECT * FROM similar ORDER BY id DESC LIMIT 4")
