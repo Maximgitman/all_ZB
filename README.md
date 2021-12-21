@@ -8,7 +8,7 @@ Web приложение, которое включает в себя неско
 
 <div><b>Stack:</b> Python, HTML, CSS, Flask, SQL, Jinja, Pytorch, Tesseract, Bootstrap;</div>
 
-<b>Ссылка на web app:</b> [https://allzb.com](https://cc3b-205-178-20-45.ngrok.io)</div>
+<b>Ссылка на web app:</b> [https://allzb.com](https://3ce3-205-178-20-45.ngrok.io)</div>
 
 ## <div align="center">Quick Start Examples</div>
 
