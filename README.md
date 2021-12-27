@@ -94,5 +94,7 @@ CREATE TABLE similar(id INTEGER PRIMARY KEY AUTOINCREMENT, text_1 TEXT NOT NULL,
 На вход получаем 2 предложения, после чего представляем их в виде вектора и сравниваем его с помощью косинусного расстояния.
 Для того чтобы попробовать, необходимо заполнить два поля, в которых запрашивается два текста для сравнения друг с другом. 
 
+Weights: ![weights word2vec](https://drive.google.com/file/d/1EFvPwKPlTEuSaSJmgLg9-jV36TCO5sCn/view?usp=sharing)
+
 ![emotion-detection](static/4_TextRecognitionScreen.png)
 </details>
