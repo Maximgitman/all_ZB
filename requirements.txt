@@ -1,11 +1,9 @@
 cs50>=8.0.0
-flask>=2.0.2
-transformers>=4.11.3
+gensim==4.1.2
+flask==1.1.4
+werkzeug==0.16.0
 pytesseract==0.3.8
 pillow==8.3.1
-werkzeug==2.0.2
+transformers==4.11.3
 nltk==3.6.5
 numpy==1.21.1
-torchvision==0.10.0
-gensim==4.1.2
-scipy==1.7.1

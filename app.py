@@ -141,3 +141,7 @@ def similar_txt():
         # Show last 3 results from DataBase
         results = db.execute("SELECT * FROM similar ORDER BY id DESC LIMIT 4")
         return render_template("similar-recognition.html", results=results)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -20,7 +20,7 @@ Web приложение, которое включает в себя неско
 Для запуска на локальной машине необходимо скачать веса модели и скопировать их в папку 
 [/static/](https://https://github.com/Maximgitman/all_ZB/tree/main/static)
 Скачать веса можно по ссылке
-[weights_model](https://github.com/Maximgitman/all_ZB/blob/main/README.md) installed 
+[weights_model](https://drive.google.com/drive/folders/16jodr7lwA-nQbeftbE1zWgqYa419oxdC?usp=sharing) installed 
 
 Чтобы установить на локальной машине:
 ```bash
