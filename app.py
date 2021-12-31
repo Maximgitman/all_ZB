@@ -14,7 +14,7 @@ index2word_set = set(model.index_to_key)
 Sentiment_ru = SemanticRu()
 
 UPLOAD_FOLDER = "static/uploads/"
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 def allowed_file(filename):
